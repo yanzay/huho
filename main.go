@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 
 	"github.com/yanzay/huho/templates"
@@ -71,7 +72,29 @@ func main() {
 		templates.WritePage(w, *sessions[sessionID])
 	}
 	http.HandleFunc("/callback", AuthCallback)
+	server.Subscribe("addproject", NewProjectHandler)
 	server.Start()
+}
+
+func NewProjectHandler(session *teslo.Session, event *teslo.Event) {
+	if event.Type == "submit" {
+		project := parseProject(event.Data)
+		sessions[session.ID].Projects = append(sessions[session.ID].Projects, project)
+		//TODO save to db
+		session.Respond("projects", templates.ProjectList(*sessions[session.ID]))
+		session.Respond("addproject", templates.AddProject())
+	}
+}
+
+func parseProject(data string) templates.Project {
+	vs, err := url.ParseQuery(data)
+	if err != nil {
+		log.Error(err)
+	}
+	return templates.Project{
+		Domain: vs.Get("domain"),
+		URL:    vs.Get("url"),
+	}
 }
 
 func AuthCallback(w http.ResponseWriter, r *http.Request) {

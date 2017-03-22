@@ -58,7 +58,7 @@ func StreamPage(qw422016 *qt422016.Writer, state State) {
 	if state.Login == "" {
 		//line templates/page.qtpl:33
 		qw422016.N().S(`
-        <a href="`)
+          <a href="`)
 		//line templates/page.qtpl:34
 		qw422016.E().S(state.GithubURL)
 		//line templates/page.qtpl:34
@@ -68,51 +68,205 @@ func StreamPage(qw422016 *qt422016.Writer, state State) {
 	} else {
 		//line templates/page.qtpl:35
 		qw422016.N().S(`
-        <p>Logged in as `)
+          <p>Logged in as `)
 		//line templates/page.qtpl:36
 		qw422016.E().S(state.Login)
 		//line templates/page.qtpl:36
 		qw422016.N().S(`</p>
-        `)
+          `)
 		//line templates/page.qtpl:37
+		StreamProjects(qw422016, state)
+		//line templates/page.qtpl:37
+		qw422016.N().S(`
+        `)
+		//line templates/page.qtpl:38
 	}
-	//line templates/page.qtpl:37
+	//line templates/page.qtpl:38
 	qw422016.N().S(`
       </div>
 
     </div>
  `)
-	//line templates/page.qtpl:41
+	//line templates/page.qtpl:42
 	templates.StreamJS(qw422016)
-	//line templates/page.qtpl:41
+	//line templates/page.qtpl:42
 	qw422016.N().S(`
 </body>
 `)
-//line templates/page.qtpl:43
+//line templates/page.qtpl:44
 }
 
-//line templates/page.qtpl:43
+//line templates/page.qtpl:44
 func WritePage(qq422016 qtio422016.Writer, state State) {
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	StreamPage(qw422016, state)
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	qt422016.ReleaseWriter(qw422016)
-//line templates/page.qtpl:43
+//line templates/page.qtpl:44
 }
 
-//line templates/page.qtpl:43
+//line templates/page.qtpl:44
 func Page(state State) string {
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	WritePage(qb422016, state)
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	qs422016 := string(qb422016.B)
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line templates/page.qtpl:43
+	//line templates/page.qtpl:44
 	return qs422016
-//line templates/page.qtpl:43
+//line templates/page.qtpl:44
+}
+
+//line templates/page.qtpl:46
+func StreamProjects(qw422016 *qt422016.Writer, state State) {
+	//line templates/page.qtpl:46
+	qw422016.N().S(`
+<div>`)
+	//line templates/page.qtpl:47
+	StreamAddProject(qw422016)
+	//line templates/page.qtpl:47
+	qw422016.N().S(`</div>
+<div>`)
+	//line templates/page.qtpl:48
+	StreamProjectList(qw422016, state)
+	//line templates/page.qtpl:48
+	qw422016.N().S(`</div>
+`)
+//line templates/page.qtpl:49
+}
+
+//line templates/page.qtpl:49
+func WriteProjects(qq422016 qtio422016.Writer, state State) {
+	//line templates/page.qtpl:49
+	qw422016 := qt422016.AcquireWriter(qq422016)
+	//line templates/page.qtpl:49
+	StreamProjects(qw422016, state)
+	//line templates/page.qtpl:49
+	qt422016.ReleaseWriter(qw422016)
+//line templates/page.qtpl:49
+}
+
+//line templates/page.qtpl:49
+func Projects(state State) string {
+	//line templates/page.qtpl:49
+	qb422016 := qt422016.AcquireByteBuffer()
+	//line templates/page.qtpl:49
+	WriteProjects(qb422016, state)
+	//line templates/page.qtpl:49
+	qs422016 := string(qb422016.B)
+	//line templates/page.qtpl:49
+	qt422016.ReleaseByteBuffer(qb422016)
+	//line templates/page.qtpl:49
+	return qs422016
+//line templates/page.qtpl:49
+}
+
+//line templates/page.qtpl:51
+func StreamAddProject(qw422016 *qt422016.Writer) {
+	//line templates/page.qtpl:51
+	qw422016.N().S(`
+<form id="addproject">
+<input type="text" name="url" placeholder="Repository URL">
+<input type="text" name="domain" placeholder="Domain">
+<input type="submit" value="Add project">
+</form>
+`)
+//line templates/page.qtpl:57
+}
+
+//line templates/page.qtpl:57
+func WriteAddProject(qq422016 qtio422016.Writer) {
+	//line templates/page.qtpl:57
+	qw422016 := qt422016.AcquireWriter(qq422016)
+	//line templates/page.qtpl:57
+	StreamAddProject(qw422016)
+	//line templates/page.qtpl:57
+	qt422016.ReleaseWriter(qw422016)
+//line templates/page.qtpl:57
+}
+
+//line templates/page.qtpl:57
+func AddProject() string {
+	//line templates/page.qtpl:57
+	qb422016 := qt422016.AcquireByteBuffer()
+	//line templates/page.qtpl:57
+	WriteAddProject(qb422016)
+	//line templates/page.qtpl:57
+	qs422016 := string(qb422016.B)
+	//line templates/page.qtpl:57
+	qt422016.ReleaseByteBuffer(qb422016)
+	//line templates/page.qtpl:57
+	return qs422016
+//line templates/page.qtpl:57
+}
+
+//line templates/page.qtpl:59
+func StreamProjectList(qw422016 *qt422016.Writer, state State) {
+	//line templates/page.qtpl:59
+	qw422016.N().S(`
+<table id="projects" class="table table-hover">
+<thead>
+  <tr>
+    <th>URL</th>
+    <th>Domain</th>
+    <th>Auto-deploy</th>
+  </tr>
+</thead>
+`)
+	//line templates/page.qtpl:68
+	for _, project := range state.Projects {
+		//line templates/page.qtpl:68
+		qw422016.N().S(`
+  <tr>
+    <td>`)
+		//line templates/page.qtpl:70
+		qw422016.E().S(project.URL)
+		//line templates/page.qtpl:70
+		qw422016.N().S(`</td>
+    <td>`)
+		//line templates/page.qtpl:71
+		qw422016.E().S(project.Domain)
+		//line templates/page.qtpl:71
+		qw422016.N().S(`</td>
+    <td><input type="checkbox"></td>
+  </tr>
+`)
+		//line templates/page.qtpl:74
+	}
+	//line templates/page.qtpl:74
+	qw422016.N().S(`
+</table>
+`)
+//line templates/page.qtpl:76
+}
+
+//line templates/page.qtpl:76
+func WriteProjectList(qq422016 qtio422016.Writer, state State) {
+	//line templates/page.qtpl:76
+	qw422016 := qt422016.AcquireWriter(qq422016)
+	//line templates/page.qtpl:76
+	StreamProjectList(qw422016, state)
+	//line templates/page.qtpl:76
+	qt422016.ReleaseWriter(qw422016)
+//line templates/page.qtpl:76
+}
+
+//line templates/page.qtpl:76
+func ProjectList(state State) string {
+	//line templates/page.qtpl:76
+	qb422016 := qt422016.AcquireByteBuffer()
+	//line templates/page.qtpl:76
+	WriteProjectList(qb422016, state)
+	//line templates/page.qtpl:76
+	qs422016 := string(qb422016.B)
+	//line templates/page.qtpl:76
+	qt422016.ReleaseByteBuffer(qb422016)
+	//line templates/page.qtpl:76
+	return qs422016
+//line templates/page.qtpl:76
 }

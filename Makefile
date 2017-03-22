@@ -6,5 +6,7 @@ dev: huho
 	./huho
 build:
 	go build -v
+install:
+	go install -v
 clean:
 	rm huho

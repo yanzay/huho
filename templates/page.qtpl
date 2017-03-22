@@ -31,13 +31,46 @@
     <div class="container">
       <div>
         {% if state.Login == "" %}
-        <a href="{%s state.GithubURL %}">Log in with github</a>
+          <a href="{%s state.GithubURL %}">Log in with github</a>
         {% else %}
-        <p>Logged in as {%s state.Login %}</p>
+          <p>Logged in as {%s state.Login %}</p>
+          {%= Projects(state) %}
         {% endif %}
       </div>
 
     </div>
  {%= templates.JS() %}
 </body>
+{% endfunc %}
+
+{% func Projects(state State) %}
+<div>{%= AddProject() %}</div>
+<div>{%= ProjectList(state) %}</div>
+{% endfunc %}
+
+{% func AddProject() %}
+<form id="addproject">
+<input type="text" name="url" placeholder="Repository URL">
+<input type="text" name="domain" placeholder="Domain">
+<input type="submit" value="Add project">
+</form>
+{% endfunc %}
+
+{% func ProjectList(state State) %}
+<table id="projects" class="table table-hover">
+<thead>
+  <tr>
+    <th>URL</th>
+    <th>Domain</th>
+    <th>Auto-deploy</th>
+  </tr>
+</thead>
+{% for _, project := range state.Projects %}
+  <tr>
+    <td>{%s project.URL %}</td>
+    <td>{%s project.Domain %}</td>
+    <td><input type="checkbox"></td>
+  </tr>
+{% endfor %}
+</table>
 {% endfunc %}
