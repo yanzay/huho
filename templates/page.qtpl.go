@@ -214,59 +214,65 @@ func StreamProjectList(qw422016 *qt422016.Writer, state State) {
   <tr>
     <th>URL</th>
     <th>Domain</th>
+    <th>Deploy</th>
     <th>Auto-deploy</th>
   </tr>
 </thead>
 `)
-	//line templates/page.qtpl:68
+	//line templates/page.qtpl:69
 	for _, project := range state.Projects {
-		//line templates/page.qtpl:68
+		//line templates/page.qtpl:69
 		qw422016.N().S(`
   <tr>
     <td>`)
-		//line templates/page.qtpl:70
+		//line templates/page.qtpl:71
 		qw422016.E().S(project.URL)
-		//line templates/page.qtpl:70
+		//line templates/page.qtpl:71
 		qw422016.N().S(`</td>
     <td>`)
-		//line templates/page.qtpl:71
+		//line templates/page.qtpl:72
 		qw422016.E().S(project.Domain)
-		//line templates/page.qtpl:71
+		//line templates/page.qtpl:72
 		qw422016.N().S(`</td>
-    <td><input type="checkbox"></td>
+    <td><a href="javascript:void(0);" class="btn btn-default">Deploy</a></td>
+    <td><input type="checkbox" data-id="`)
+		//line templates/page.qtpl:74
+		qw422016.E().S(project.ID)
+		//line templates/page.qtpl:74
+		qw422016.N().S(`"></td>
   </tr>
 `)
-		//line templates/page.qtpl:74
+		//line templates/page.qtpl:76
 	}
-	//line templates/page.qtpl:74
+	//line templates/page.qtpl:76
 	qw422016.N().S(`
 </table>
 `)
-//line templates/page.qtpl:76
+//line templates/page.qtpl:78
 }
 
-//line templates/page.qtpl:76
+//line templates/page.qtpl:78
 func WriteProjectList(qq422016 qtio422016.Writer, state State) {
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	qw422016 := qt422016.AcquireWriter(qq422016)
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	StreamProjectList(qw422016, state)
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	qt422016.ReleaseWriter(qw422016)
-//line templates/page.qtpl:76
+//line templates/page.qtpl:78
 }
 
-//line templates/page.qtpl:76
+//line templates/page.qtpl:78
 func ProjectList(state State) string {
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	qb422016 := qt422016.AcquireByteBuffer()
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	WriteProjectList(qb422016, state)
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	qs422016 := string(qb422016.B)
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	qt422016.ReleaseByteBuffer(qb422016)
-	//line templates/page.qtpl:76
+	//line templates/page.qtpl:78
 	return qs422016
-//line templates/page.qtpl:76
+//line templates/page.qtpl:78
 }

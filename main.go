@@ -12,6 +12,7 @@ import (
 
 	_ "net/http/pprof"
 
+	uuid "github.com/satori/go.uuid"
 	"github.com/yanzay/huho/templates"
 	"github.com/yanzay/log"
 	"github.com/yanzay/teslo"
@@ -101,9 +102,11 @@ func parseProject(data string) templates.Project {
 	if err != nil {
 		log.Error(err)
 	}
+	id := uuid.NewV4().String()
 	return templates.Project{
 		Domain: vs.Get("domain"),
 		URL:    vs.Get("url"),
+		ID:     id,
 	}
 }
 

@@ -62,6 +62,7 @@
   <tr>
     <th>URL</th>
     <th>Domain</th>
+    <th>Deploy</th>
     <th>Auto-deploy</th>
   </tr>
 </thead>
@@ -69,7 +70,8 @@
   <tr>
     <td>{%s project.URL %}</td>
     <td>{%s project.Domain %}</td>
-    <td><input type="checkbox"></td>
+    <td><a href="javascript:void(0);" class="btn btn-default">Deploy</a></td>
+    <td><input type="checkbox" data-id="{%s project.ID %}"></td>
   </tr>
 {% endfor %}
 </table>
