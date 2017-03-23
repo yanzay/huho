@@ -3,11 +3,14 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"os"
+
+	_ "net/http/pprof"
 
 	"github.com/yanzay/huho/templates"
 	"github.com/yanzay/log"
@@ -20,7 +23,7 @@ var defaultState templates.State
 var clientID, clientSecret string
 var githubConf *oauth2.Config
 var store *Storage
-var sessions map[string]*templates.State
+var sessions = newStateStore()
 
 type UserEmail struct {
 	Email   string `json:"email"`
@@ -51,10 +54,10 @@ func init() {
 	url := githubConf.AuthCodeURL("state", oauth2.AccessTypeOnline)
 
 	defaultState.GithubURL = url
-	sessions = map[string]*templates.State{"": &defaultState}
 }
 
 func main() {
+	flag.Parse()
 	store = NewStorage()
 	defer store.Close()
 	server := teslo.NewServer()
@@ -63,13 +66,14 @@ func main() {
 	}
 	server.CloseSession = func(id string) {
 		fmt.Println("Closing session:", id)
-		delete(sessions, id)
+		//sessions.DeleteState(id)
 	}
 	server.Render = func(w io.Writer, r *http.Request) {
 		sessionID := sessionIDFromRequest(r)
 		email := store.GetSession(sessionID)
-		sessions[sessionID] = &templates.State{GithubURL: defaultState.GithubURL, Login: email}
-		templates.WritePage(w, *sessions[sessionID])
+		projects := store.GetProjects(email)
+		sessions.SaveState(sessionID, templates.State{GithubURL: defaultState.GithubURL, Login: email, Projects: projects})
+		templates.WritePage(w, sessions.GetState(sessionID))
 	}
 	http.HandleFunc("/callback", AuthCallback)
 	server.Subscribe("addproject", NewProjectHandler)
@@ -77,11 +81,17 @@ func main() {
 }
 
 func NewProjectHandler(session *teslo.Session, event *teslo.Event) {
+	fmt.Println("NewProjectHandler")
 	if event.Type == "submit" {
 		project := parseProject(event.Data)
-		sessions[session.ID].Projects = append(sessions[session.ID].Projects, project)
-		//TODO save to db
-		session.Respond("projects", templates.ProjectList(*sessions[session.ID]))
+		fmt.Println("session", sessions.GetState(session.ID))
+		fmt.Println("session", session)
+		fmt.Println("event", event)
+		state := sessions.GetState(session.ID)
+		state.Projects = append(state.Projects, project)
+		sessions.SaveState(session.ID, state)
+		store.StoreProjects(state.Login, state.Projects)
+		session.Respond("projects", templates.ProjectList(state))
 		session.Respond("addproject", templates.AddProject())
 	}
 }

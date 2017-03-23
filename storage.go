@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/boltdb/bolt"
+	"github.com/yanzay/huho/templates"
 	"github.com/yanzay/log"
 )
 
@@ -54,4 +56,26 @@ func (s *Storage) GetSession(sessionID string) string {
 		return string(email)
 	}
 	return ""
+}
+
+func (s *Storage) StoreProjects(email string, projects []templates.Project) error {
+	return s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("users"))
+		data, err := json.Marshal(projects)
+		if err != nil {
+			return err
+		}
+		return b.Put([]byte(email), data)
+	})
+}
+
+func (s *Storage) GetProjects(email string) []templates.Project {
+	projects := make([]templates.Project, 0)
+	s.db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("users"))
+		data := b.Get([]byte(email))
+		err := json.Unmarshal(data, &projects)
+		return err
+	})
+	return projects
 }

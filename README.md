@@ -1,2 +1,2 @@
-# Huho
+# huho
 Hugo Hosting
