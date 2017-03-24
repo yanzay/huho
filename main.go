@@ -78,6 +78,7 @@ func main() {
 	}
 	http.HandleFunc("/callback", AuthCallback)
 	server.Subscribe("addproject", NewProjectHandler)
+	server.Subscribe("projects", ChangeProjectHandler)
 	server.Start()
 }
 
@@ -94,6 +95,29 @@ func NewProjectHandler(session *teslo.Session, event *teslo.Event) {
 		store.StoreProjects(state.Login, state.Projects)
 		session.Respond("projects", templates.ProjectList(state))
 		session.Respond("addproject", templates.AddProject())
+	}
+}
+
+func ChangeProjectHandler(session *teslo.Session, event *teslo.Event) {
+	fmt.Println("ChangeProjectHandler")
+	fmt.Println(event)
+	fmt.Println("data", event.Data)
+	if event.Type == "change" {
+		data := struct {
+			ID      string
+			Checked bool
+		}{}
+		json.Unmarshal([]byte(event.Data), &data)
+		fmt.Println("parsed data:", data)
+		state := sessions.GetState(session.ID)
+		for i, project := range state.Projects {
+			if project.ID == data.ID {
+				state.Projects[i].AutoDeploy = data.Checked
+				store.StoreProjects(state.Login, state.Projects)
+				sessions.SaveState(session.ID, state)
+				return
+			}
+		}
 	}
 }
 

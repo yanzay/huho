@@ -7,7 +7,8 @@ type State struct {
 }
 
 type Project struct {
-	ID     string
-	URL    string
-	Domain string
+	ID         string
+	URL        string
+	Domain     string
+	AutoDeploy bool
 }
