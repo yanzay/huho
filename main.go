@@ -31,11 +31,6 @@ type UserEmail struct {
 	Primary bool   `json:"primary"`
 }
 
-type Site struct {
-	Repo   string `json:"repo"`
-	Domain string `json:"domain"`
-}
-
 func init() {
 	clientID := os.Getenv("GITHUB_CLIENT_ID")
 	if clientID == "" {
