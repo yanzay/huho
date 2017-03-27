@@ -10,5 +10,7 @@ race:
 	go build -v -race
 install:
 	go install -v
+test:
+	go test
 clean:
 	rm huho
