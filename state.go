@@ -21,9 +21,12 @@ func newStateStore() *stateStore {
 func (ss *stateStore) GetState(id string) templates.State {
 	ss.Lock()
 	fmt.Println(ss.states, id)
-	state := *ss.states[id]
+	state, ok := ss.states[id]
+	if !ok {
+		state = &templates.State{}
+	}
 	ss.Unlock()
-	return state
+	return *state
 }
 
 func (ss *stateStore) SaveState(id string, state templates.State) {
