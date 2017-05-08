@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 
 	_ "net/http/pprof"
 
@@ -20,11 +21,17 @@ import (
 	"golang.org/x/oauth2/github"
 )
 
-var defaultState templates.State
-var clientID, clientSecret string
-var githubConf *oauth2.Config
-var store *Storage
-var sessions = newStateStore()
+var (
+	wwwDir = flag.String("d", "/www", "Directory for generated static files")
+)
+
+var (
+	defaultState           templates.State
+	clientID, clientSecret string
+	githubConf             *oauth2.Config
+	store                  *Storage
+	sessions               = newStateStore()
+)
 
 type UserEmail struct {
 	Email   string `json:"email"`
@@ -111,6 +118,21 @@ func ChangeProjectHandler(session *teslo.Session, event *teslo.Event) {
 				store.StoreProjects(state.Login, state.Projects)
 				sessions.SaveState(session.ID, state)
 				return
+			}
+		}
+	}
+	if event.Type == "click" {
+		if strings.HasPrefix(event.ID, "deploy") {
+			id := strings.TrimPrefix(event.ID, "deploy-")
+			log.Debug(id)
+			state := sessions.GetState(session.ID)
+			for _, project := range state.Projects {
+				if project.ID == id {
+					err := deploy(*wwwDir, project)
+					if err != nil {
+						log.Error(err)
+					}
+				}
 			}
 		}
 	}

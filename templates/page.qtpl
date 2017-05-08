@@ -70,7 +70,7 @@
   <tr>
     <td>{%s project.URL %}</td>
     <td>{%s project.Domain %}</td>
-    <td><a href="javascript:void(0);" class="btn btn-default">Deploy</a></td>
+    <td><a href="javascript:void(0);" id="deploy-{%s project.ID %}" data-id="{%s project.ID %}" class="btn btn-default">Deploy</a></td>
     <td><input type="checkbox" data-id="{%s project.ID %}" {% if project.AutoDeploy %}checked="checked"{% endif %}></td>
   </tr>
 {% endfor %}

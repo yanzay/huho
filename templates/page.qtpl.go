@@ -234,7 +234,15 @@ func StreamProjectList(qw422016 *qt422016.Writer, state State) {
 		qw422016.E().S(project.Domain)
 		//line templates/page.qtpl:72
 		qw422016.N().S(`</td>
-    <td><a href="javascript:void(0);" class="btn btn-default">Deploy</a></td>
+    <td><a href="javascript:void(0);" id="deploy-`)
+		//line templates/page.qtpl:73
+		qw422016.E().S(project.ID)
+		//line templates/page.qtpl:73
+		qw422016.N().S(`" data-id="`)
+		//line templates/page.qtpl:73
+		qw422016.E().S(project.ID)
+		//line templates/page.qtpl:73
+		qw422016.N().S(`" class="btn btn-default">Deploy</a></td>
     <td><input type="checkbox" data-id="`)
 		//line templates/page.qtpl:74
 		qw422016.E().S(project.ID)
