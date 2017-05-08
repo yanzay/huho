@@ -1,0 +1,9 @@
+{% func CartWidget(items []*Item) %}
+  <div id="cart">
+    <ul>
+    {% for _, item := range items %}
+      <li>{%s item.Product.Name %} - {%d item.Quantity %}</li>
+    {% endfor %}
+    </ul>
+  </div>
+{% endfunc %}

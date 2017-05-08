@@ -1,0 +1,37 @@
+{% import "github.com/yanzay/teslo/templates" %}
+
+{% code
+type Item struct {
+	ID      string
+	Content string
+  Done    bool
+}
+
+type State struct {
+	Items []*Item
+}
+%}
+
+{% func Page(state State) %}
+<html>
+<head>
+<title>Test title</title>
+{%= templates.JS() %}
+</head>
+<body id="app">
+    {%= Todo(state.Items) %}
+</body>
+</html>
+{% endfunc %}
+
+{% func Body(name string) %}
+  <p>Hello, {%s name %}!</p>
+{% endfunc %}
+
+{% func Todo(items []*Item) %}
+<ul id="todo">
+  {% for _, item := range items %}
+    <li><input type="checkbox" id="{%s item.ID %}"{% if item.Done%} checked="checked"{% endif %}>{%s item.Content %}</input></li>
+  {% endfor %}
+</ul>
+{% endfunc %}

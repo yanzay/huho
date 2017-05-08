@@ -1,0 +1,15 @@
+{% import "github.com/yanzay/teslo/templates" %}
+
+{% func Page(state State) %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body id="app">
+    <form>
+      <input type="text" name="repo"></input>
+      <input type="submit" value="Add" id="add-repo">
+    </form>
+    {%= templates.JS() %}
+</body>
+{% endfunc %}

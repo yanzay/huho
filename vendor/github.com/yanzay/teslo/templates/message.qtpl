@@ -1,0 +1,5 @@
+{% stripspace %}
+{% func Message(id string, content string) %}
+{"id":{%q= id %},"content":{%q= content %}}
+{% endfunc %}
+{% endstripspace %}
